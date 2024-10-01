@@ -43,6 +43,8 @@ class ContFramePool {
 private:
     /* -- DEFINE YOUR CONT FRAME POOL DATA STRUCTURE(s) HERE. */
     
+
+    
     
     
     /* ---- STATE MANAGEMENT */
@@ -51,6 +53,13 @@ private:
 
     FrameState get_state(unsigned long _frame_no);
     void set_state(unsigned long _frame_no, FrameState _state);
+
+    unsigned char* bitmap;  // Array to store state of each frame (1 byte per frame for now)
+    unsigned long base_frame_no;  // Start of the frame pool in physical memory
+    unsigned long nframes;        // Total number of frames in the pool
+    unsigned long info_frame_no;  // Frame used to store management information
+
+
     
 public:
 
@@ -74,6 +83,7 @@ public:
      NOTE: This function must be called before the paging system
      is initialized.
      */
+    ~ContFramePool();
     
     unsigned long get_frames(unsigned int _n_frames);
     /*
@@ -118,4 +128,34 @@ public:
      The exact number is computed in this function..
      */
 };
+
+/*--------------------------------------------------------------------------*/
+/* L i n k e d   L i s t   f o r   F r a m e   P o o l s */
+/*--------------------------------------------------------------------------*/
+#define MAX_FRAME_POOLS 10
+struct FramePoolNode {
+    ContFramePool* pool;
+    FramePoolNode* next;
+    FramePoolNode* prev;
+};
+
+// Array to store frame pool nodes
+static FramePoolNode framePoolNodes[MAX_FRAME_POOLS];
+static int next_free_node = 0;  // Tracks the next free node in the array
+
+// Global variables for head and tail of the frame pool linked list
+extern FramePoolNode* head;
+extern FramePoolNode* tail;
+
+/*--------------------------------------------------------------------------*/
+/* L i n k e d   L i s t   M a n a g e m e n t   F u n c t i o n s */
+/*--------------------------------------------------------------------------*/
+
+// Adds a new frame pool to the linked list
+void add_frame_pool(ContFramePool* pool);
+
+// Removes a frame pool from the linked list
+void remove_frame_pool(ContFramePool* pool);
+
+
 #endif

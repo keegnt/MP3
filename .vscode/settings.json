@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "exceptions.C": "cpp",
+        "kernel.C": "cpp",
+        "cont_frame_pool.C": "cpp",
+        "console.C": "cpp",
+        "page_table.C": "cpp",
+        "interrupts.C": "cpp",
+        "irq.C": "cpp",
+        "machine.C": "cpp",
+        "simple_timer.C": "cpp",
+        "utils.C": "cpp",
+        "idt.C": "cpp"
+    }
+}
